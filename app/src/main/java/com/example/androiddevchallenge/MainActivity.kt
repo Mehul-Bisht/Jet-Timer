@@ -15,45 +15,49 @@
  */
 package com.example.androiddevchallenge
 
-import android.graphics.fonts.FontStyle
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.androiddevchallenge.ui.theme.MyTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.androiddevchallenge.Util.getMillis
 import com.example.androiddevchallenge.Util.getMinutes
 import com.example.androiddevchallenge.Util.getSeconds
-import kotlin.time.seconds
+import com.example.androiddevchallenge.ui.theme.MyTheme
 
 class MainActivity : AppCompatActivity() {
 
@@ -85,9 +89,9 @@ fun MyApp() {
     val progress by jetTimerVM.fractionCovered.observeAsState()
     val time by jetTimerVM.timeRemaining.observeAsState()
     val isPaused by jetTimerVM.isPaused.observeAsState()
-    var minutes = remember{ mutableStateOf(0) }
-    var seconds = remember{ mutableStateOf(0) }
-    var millis = remember{ mutableStateOf(0) }
+    var minutes = remember { mutableStateOf(0) }
+    var seconds = remember { mutableStateOf(0) }
+    var millis = remember { mutableStateOf(0) }
     val arrowSize: Dp = 30.dp
     val circleSize: Dp = 300.dp
 
@@ -145,7 +149,7 @@ fun MyApp() {
                         strokeWidth = 20.dp
                     )
                     CircularProgressIndicator(
-                        progress = progress?: 0.8F,
+                        progress = progress ?: 0.8F,
                         modifier = Modifier
                             .height(circleSize)
                             .width(circleSize),
@@ -167,11 +171,10 @@ fun MyApp() {
                     }
                 )
             }
-
         }
-        
+
         Spacer(modifier = Modifier.height(30.dp))
-        
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -193,7 +196,7 @@ fun MyApp() {
                         .background(color = Color.White),
                 ) {
                     Text(
-                        text = if(minutes.value < 10) "0${minutes.value}" else "${minutes.value}",
+                        text = if (minutes.value < 10) "0${minutes.value}" else "${minutes.value}",
                         color = Color(0xFFFF8B07),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.W700,
@@ -229,7 +232,7 @@ fun MyApp() {
                         .background(color = Color.White),
                 ) {
                     Text(
-                        text = if(seconds.value < 10) "0${seconds.value}" else "${seconds.value}",
+                        text = if (seconds.value < 10) "0${seconds.value}" else "${seconds.value}",
                         color = Color(0xFFFF8B07),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.W700,
@@ -265,7 +268,7 @@ fun MyApp() {
                         .background(color = Color.White),
                 ) {
                     Text(
-                        text = if(millis.value < 10) "0${millis.value}" else "${millis.value}",
+                        text = if (millis.value < 10) "0${millis.value}" else "${millis.value}",
                         color = Color(0xFFFF8B07),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.W700,
@@ -289,7 +292,8 @@ fun MyApp() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Button(onClick = { if(seconds.value > 0) jetTimerVM.startTimer(seconds.value) },
+            Button(
+                onClick = { if (seconds.value > 0) jetTimerVM.startTimer(seconds.value) },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             ) {
                 Text(
@@ -299,19 +303,21 @@ fun MyApp() {
                     fontSize = 18.sp,
                 )
             }
-            Button(onClick = { jetTimerVM.pauseResume() },
+            Button(
+                onClick = { jetTimerVM.pauseResume() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(
-                    text = if(isPaused!!) "Resume" else "Pause",
+                    text = if (isPaused!!) "Resume" else "Pause",
                     color = Color(0xFFFF8B07),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
             }
-            Button(onClick = { jetTimerVM.resetTimer() },
+            Button(
+                onClick = { jetTimerVM.resetTimer() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-                ) {
+            ) {
                 Text(
                     text = "Reset",
                     color = Color(0xFFFF8B07),

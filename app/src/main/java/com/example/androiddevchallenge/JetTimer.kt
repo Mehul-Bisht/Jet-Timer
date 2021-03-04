@@ -1,3 +1,18 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge
 
 import android.os.CountDownTimer
@@ -6,7 +21,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class JetTimer: ViewModel() {
+class JetTimer : ViewModel() {
 
     var started = false
     var paused = false
@@ -31,19 +46,19 @@ class JetTimer: ViewModel() {
 
     fun initTimer(millisRemaining: Long) {
 
-        timerr = object : CountDownTimer(millisRemaining,30) {
+        timerr = object : CountDownTimer(millisRemaining, 30) {
             override fun onTick(millisUntilFinished: Long) {
-                Log.d("timer ","$millisUntilFinished")
+                Log.d("timer ", "$millisUntilFinished")
                 millisLeft = millisUntilFinished
-                val fraction: Float = millisLeft/millisTotal.toFloat()
+                val fraction: Float = millisLeft / millisTotal.toFloat()
                 _fractionCovered.value = fraction
                 _timeRemaining.value = millisUntilFinished
             }
 
             override fun onFinish() {
-                Log.d("timer ","finished")
+                Log.d("timer ", "finished")
                 started = !started
-                //millisLeft = 0
+                // millisLeft = 0
                 _fractionCovered.value = 0F
                 _timeRemaining.value = 0L
             }
@@ -51,7 +66,7 @@ class JetTimer: ViewModel() {
     }
 
     fun startTimer(duration: Int) {
-        if(!started) {
+        if (!started) {
             started = !started
             millisTotal = duration * 1000L
             initTimer(millisTotal)
@@ -61,7 +76,7 @@ class JetTimer: ViewModel() {
     }
 
     fun resetTimer() {
-        if(started) {
+        if (started) {
             started = !started
             timerr.cancel()
             paused = false
@@ -73,7 +88,7 @@ class JetTimer: ViewModel() {
     }
 
     fun pauseResume() {
-        if(started) {
+        if (started) {
             if (!paused) {
                 // running state, pause timer
                 timerr.cancel()
